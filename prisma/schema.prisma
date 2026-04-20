@@ -14,6 +14,8 @@ model User {
   emailVerified DateTime?
   image         String?
   name          String?
+  avatarUrl     String?
+  token         String?
   createdAt     DateTime       @default(now())
   subscriptions Subscription[]
   emailLogs     EmailLog[]
