@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OpenContributers
 
-## Getting Started
+OpenContributers is a habit-building platform for open source contribution.
 
-First, run the development server:
+You sign up, pick GitHub repositories you care about, and receive one (or a few) open issues from those repositories in your inbox each day. Instead of facing thousands of issues at once, you work on one issue at a time.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Core Idea
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The approach is inspired by a simple analogy: like flossing, small daily actions are easier to sustain than a big intimidating goal. Contributing to open source can feel overwhelming, but triaging one issue a day is small enough to become a habit.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What Triaging Means
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You do not need to fix the bug. You only need to move the issue forward. For example:
 
-## Learn More
+- Reproduce and confirm a reported bug
+- Ask the reporter for a clearer example
+- Identify and point out duplicates
+- Leave a "+1" comment to signal value and priority
 
-To learn more about Next.js, take a look at the following resources:
+## Why This Helps Maintainers
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Popular projects may have only a handful of maintainers managing thousands of issues. OpenContributers distributes that load across many volunteer developers, each contributing a small amount consistently.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## The Contribution Progression
 
-## Deploy on Vercel
+Daily triage creates a practical on-ramp:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Start by commenting and clarifying issues
+2. Learn repository context over time
+3. Fix small bugs
+4. Ship larger features
+5. Potentially become a core contributor
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation Mode (Experimental)
+
+In addition to issue triage, OpenContributers can send an undocumented method or class from a repository, encouraging contributors to improve documentation one small step at a time.
+
+## In Short
+
+OpenContributers turns “I want to contribute to open source someday” into a daily 5-minute practice.
