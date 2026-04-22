@@ -1,6 +1,8 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
+import RepoSearch from "@/components/RepoSearch"
+import MySubscriptions from "@/components/MySubscriptions"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -11,7 +13,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto flex flex-col gap-6">
         <div className="bg-white rounded-2xl shadow-sm p-8 flex items-center gap-4">
           {session.user?.image && (
             <img
@@ -28,15 +30,8 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="mt-6 bg-white rounded-2xl shadow-sm p-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            Step 3 complete ✅
-          </h2>
-          <p className="text-gray-500">
-            GitHub OAuth is working. Your account is saved in the database.
-            Next up — search and subscribe to repos.
-          </p>
-        </div>
+        <MySubscriptions />
+        <RepoSearch />
       </div>
     </div>
   )

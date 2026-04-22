@@ -23,6 +23,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id
+        const account = await prisma.account.findFirst({
+          where: { userId: user.id, provider: "github" },
+        })
+        session.user.githubToken = account?.access_token ?? null
       }
       return session
     },
