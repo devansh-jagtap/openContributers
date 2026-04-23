@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { syncQueue } from "@/lib/queue"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
@@ -35,11 +36,19 @@ export async function POST(req: NextRequest) {
   }
 
   const subscription = await prisma.subscription.create({
+  await prisma.subscription.create({
     data: {
       userId: session.user.id,
       repoId: repo.id,
     },
   })
 
-  return NextResponse.json({ message: "Subscribed!", repo, subscription })
+  await syncQueue.add("sync-repo", {
+    repoId: repo.id,
+    owner: repo.owner,
+    name: repo.name,
+    githubToken: session.user.githubToken,
+  })
+
+  return NextResponse.json({ message: "Subscribed and sync started!", repo, subscription })
 }
