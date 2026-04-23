@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
   }
 
   const subscription = await prisma.subscription.create({
-  await prisma.subscription.create({
     data: {
       userId: session.user.id,
       repoId: repo.id,
