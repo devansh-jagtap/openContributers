@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --landing-bg-start: #f8fafc;
+  --landing-bg-end: #f4f1ec;
 }
 
 @theme inline {
@@ -22,5 +24,87 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+}
+
+.landing-shell {
+  position: relative;
+  overflow: clip;
+  background: linear-gradient(165deg, var(--landing-bg-start) 0%, var(--landing-bg-end) 100%);
+}
+
+.landing-ambient {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.landing-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(4px);
+  opacity: 0.45;
+}
+
+.landing-orb-one {
+  top: -120px;
+  left: -90px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle at 30% 30%, #fb7185 0%, #fdba74 45%, transparent 72%);
+  animation: drift 16s ease-in-out infinite;
+}
+
+.landing-orb-two {
+  right: -110px;
+  top: 25%;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle at 65% 40%, #67e8f9 0%, #60a5fa 46%, transparent 72%);
+  animation: drift 18s ease-in-out infinite reverse;
+}
+
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-float {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(14px, -10px, 0) scale(1.04);
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-orb-one,
+  .landing-orb-two {
+    opacity: 0.32;
+  }
 }
