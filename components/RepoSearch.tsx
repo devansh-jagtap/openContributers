@@ -43,69 +43,77 @@ export default function RepoSearch() {
     })
     if (res.ok) {
       setSubscribed(prev => new Set(prev).add(repo.fullName))
-      window.dispatchEvent(new CustomEvent("subscription:changed"))
+      window.dispatchEvent(new Event("subscriptions-updated"))
     }
     setSubscribing(null)
   }
 
   return (
-    <section className="rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
-      <div className="mb-4">
-        <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Repository Discovery</p>
-        <h2 className="mt-1 text-lg font-semibold text-zinc-900">Find a repo to contribute to</h2>
-      </div>
+    <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
+      <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Discover</p>
+      <h2 className="mt-1 text-lg font-semibold text-zinc-900">Find a repo to contribute to</h2>
 
-      <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="mt-5 flex gap-2">
         <input
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === "Enter" && handleSearch()}
-          placeholder='Search repos e.g. "react" or "facebook/react"'
-          className="flex-1 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-300"
+          placeholder='Try "react" or "facebook/react"'
+          className="flex-1 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/20"
         />
         <button
           onClick={handleSearch}
           disabled={loading}
-          className="rounded-lg bg-zinc-900 px-5 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:opacity-50"
+          className="rounded-xl bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:opacity-50"
         >
           {loading ? "Searching..." : "Search"}
         </button>
       </div>
 
-      <div className="mt-4 flex flex-col gap-3">
-        {repos.map(repo => (
-          <article key={repo.id} className="flex items-start justify-between gap-4 rounded-xl border border-zinc-100 bg-zinc-50/80 p-4">
-            <div className="flex flex-col gap-1">
-              
-              <a
-                href={`https://github.com/${repo.fullName}`}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-zinc-900 hover:underline"
-              >
-                {repo.fullName}
-              </a>
-              <p className="line-clamp-2 text-sm text-zinc-500">{repo.description}</p>
-              <div className="mt-1 flex gap-3 text-xs text-zinc-400">
-                {repo.language && <span>⬡ {repo.language}</span>}
-                <span>★ {repo.stars.toLocaleString()}</span>
-              </div>
-            </div>
-            <button
-              onClick={() => handleSubscribe(repo)}
-              disabled={subscribing === repo.fullName || subscribed.has(repo.fullName)}
-              className="shrink-0 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+      {repos.length > 0 && (
+        <div className="mt-4 flex flex-col gap-3">
+          {repos.map(repo => (
+            <div
+              key={repo.id}
+              className="flex items-start justify-between gap-4 rounded-xl border border-zinc-100 bg-zinc-50/80 p-4"
             >
-              {subscribed.has(repo.fullName)
-                ? "Subscribed ✓"
-                : subscribing === repo.fullName
-                ? "Adding..."
-                : "Subscribe"}
-            </button>
-          </article>
-        ))}
-      </div>
-    </section>
+              <div className="flex flex-col gap-1 min-w-0">
+                <a
+                  href={`https://github.com/${repo.fullName}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-semibold text-zinc-900 hover:underline underline-offset-2 truncate"
+                >
+                  {repo.fullName}
+                </a>
+                <p className="text-xs leading-relaxed text-zinc-500 line-clamp-2">{repo.description}</p>
+                <div className="flex gap-3 mt-1 text-xs text-zinc-400">
+                  {repo.language && <span>⬡ {repo.language}</span>}
+                  <span>★ {repo.stars.toLocaleString()}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => handleSubscribe(repo)}
+                disabled={subscribing === repo.fullName || subscribed.has(repo.fullName)}
+                className="shrink-0 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {subscribed.has(repo.fullName)
+                  ? "Subscribed ✓"
+                  : subscribing === repo.fullName
+                  ? "Adding..."
+                  : "Subscribe"}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {repos.length === 0 && !loading && query && (
+        <div className="mt-4 rounded-xl border border-dashed border-zinc-200 bg-zinc-50/80 p-6 text-center">
+          <p className="text-sm text-zinc-500">No results found for "{query}"</p>
+        </div>
+      )}
+    </div>
   )
 }
