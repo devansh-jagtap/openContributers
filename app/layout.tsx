@@ -13,8 +13,14 @@ export const metadata: Metadata = {
   description: "Find open source issues to contribute to",
 };
 
-// Single place — server-side only, runs once per process
-if (typeof window === "undefined") {
+// // Single place — server-side only, runs once per process
+// if (typeof window === "undefined") {
+//   startSyncWorker();
+//   startSendDigestWorker();
+//   scheduleDailyDigest();
+// }
+
+if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
   startSyncWorker();
   startSendDigestWorker();
   scheduleDailyDigest();
