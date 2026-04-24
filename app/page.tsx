@@ -107,6 +107,62 @@ export default function Home() {
             </article>
           ))}
         </section>
+
+        <section className="mt-14 rounded-3xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_12px_32px_rgba(0,0,0,0.06)] sm:p-8" aria-label="Features">
+          <div className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Features</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+              Built for steady contribution, not occasional bursts.
+            </h2>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {[
+              {
+                title: "Smart Repo Discovery",
+                description: "Search repositories, inspect language and star signals, then subscribe in one click.",
+              },
+              {
+                title: "Subscription Control",
+                description: "Manage your active repos from the dashboard without losing focus.",
+              },
+              {
+                title: "Daily Digest Engine",
+                description: "Background jobs dispatch fresh open issues every day, automatically.",
+              },
+              {
+                title: "Habit-First Workflow",
+                description: "A simple routine: login, review one issue, and ship a small improvement.",
+              },
+            ].map((item) => (
+              <article key={item.title} className="rounded-2xl border border-zinc-100 bg-zinc-50/90 p-5">
+                <h3 className="text-base font-semibold text-zinc-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-600">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <footer className="mt-12 flex flex-col gap-5 border-t border-zinc-200/80 py-8 text-sm text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold text-zinc-900">OpenContributers</p>
+            <p className="mt-1">Small daily steps toward meaningful open source impact.</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/" className="transition hover:text-zinc-900">Home</Link>
+            <Link href="/login" className="transition hover:text-zinc-900">Login</Link>
+            <Link href="/dashboard" className="transition hover:text-zinc-900">Dashboard</Link>
+            <a
+              href="https://github.com/devansh-jagtap/openContributers"
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:text-zinc-900"
+            >
+              GitHub
+            </a>
+          </div>
+        </footer>
       </div>
     </main>
   );
