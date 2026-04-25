@@ -56,7 +56,7 @@ export default async function DashboardPage() {
         <div className="grid gap-6 lg:grid-cols-3">
 
           {/* COL 1 — Direction Guide */}
-          <div className="animate-fade-up scroll-mt-6" style={{ animationDelay: "80ms" }}>
+          <div className="animate-fade-up scroll-mt-6 lg:h-[640px]" style={{ animationDelay: "80ms" }}>
             <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.06)] h-full">
               <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Direction Guide</p>
               <h2 className="mt-1 text-base font-semibold text-zinc-900">Follow this exact flow each day</h2>
@@ -98,12 +98,12 @@ export default async function DashboardPage() {
           </div>
 
           {/* COL 2 — Subscriptions */}
-          <div id="subscriptions" className="animate-fade-up h-full min-h-0 scroll-mt-6" style={{ animationDelay: "160ms" }}>
+          <div id="subscriptions" className="animate-fade-up h-full min-h-0 scroll-mt-6 lg:h-[640px]" style={{ animationDelay: "160ms" }}>
             <MySubscriptions />
           </div>
 
           {/* COL 3 — Discover */}
-          <div id="find-repos" className="animate-fade-up h-full min-h-0 scroll-mt-6" style={{ animationDelay: "240ms" }}>
+          <div id="find-repos" className="animate-fade-up h-full min-h-0 scroll-mt-6 lg:h-[640px]" style={{ animationDelay: "240ms" }}>
             <RepoSearch />
           </div>
 
