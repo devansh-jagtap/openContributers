@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (!query) return NextResponse.json({ error: "Query required" }, { status: 400 })
   const pageParam = Number(req.nextUrl.searchParams.get("page") ?? "1")
   const page = Number.isFinite(pageParam) && pageParam > 0 ? Math.floor(pageParam) : 1
-  const perPage = 10
+  const perPage = 5
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
