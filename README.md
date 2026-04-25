@@ -1,40 +1,171 @@
 # OpenContributers
 
-OpenContributers is a habit-building platform for open source contribution.
+A habit-building tool for developers who want to contribute to open source but don't know where to start.
 
-You sign up, pick GitHub repositories you care about, and receive one (or a few) open issues from those repositories in your inbox each day. Instead of facing thousands of issues at once, you work on one issue at a time.
+**Live:** [opencontributers.vercel.app](https://opencontributers.vercel.app)
 
-## Core Idea
+---
 
-The approach is inspired by a simple analogy: like flossing, small daily actions are easier to sustain than a big intimidating goal. Contributing to open source can feel overwhelming, but triaging one issue a day is small enough to become a habit.
+## What it does
 
-## What Triaging Means
+OpenContributers delivers one open GitHub issue per day to your inbox from repositories you follow. Instead of staring at a repo with 800 open issues and closing the tab, you get one small actionable task — triage it, comment on it, fix it. Small actions compound into real open source impact.
 
-You do not need to fix the bug. You only need to move the issue forward. For example:
+The idea: contributing to open source is hard to start but easy to maintain once you have a habit. This app builds that habit.
 
-- Reproduce and confirm a reported bug
-- Ask the reporter for a clearer example
-- Identify and point out duplicates
-- Leave a "+1" comment to signal value and priority
+---
 
-## Why This Helps Maintainers
+## Tech Stack
 
-Popular projects may have only a handful of maintainers managing thousands of issues. OpenContributers distributes that load across many volunteer developers, each contributing a small amount consistently.
+| Layer | Technology |
+|---|---|
+| Frontend & API | Next.js 16 (App Router) |
+| Database | PostgreSQL on Neon |
+| ORM | Prisma |
+| Job Queue | Redis on Upstash + BullMQ |
+| Worker Host | Railway |
+| Frontend Host | Vercel |
+| Auth | NextAuth.js (GitHub OAuth) |
+| Email | Resend |
+| Styling | Tailwind CSS |
 
-## The Contribution Progression
+---
 
-Daily triage creates a practical on-ramp:
+## How it works
 
-1. Start by commenting and clarifying issues
-2. Learn repository context over time
-3. Fix small bugs
-4. Ship larger features
-5. Potentially become a core contributor
+1. Sign in with GitHub
+2. Search for repos you care about and subscribe
+3. Background workers sync open issues from GitHub every 6 hours
+4. Every day at 3am UTC a digest job sends you one issue per subscribed repo
+5. You triage, comment, or fix — and build the habit
 
-## Documentation Mode (Experimental)
+---
 
-In addition to issue triage, OpenContributers can send an undocumented method or class from a repository, encouraging contributors to improve documentation one small step at a time.
+## Architecture
 
-## In Short
+```
+Vercel (Next.js)          Upstash (Redis)
+  API routes       →      Job Queue
+  Frontend UI      ←      ↓
+                        Railway (BullMQ Workers)
+                          Sync Worker
+                          Digest Worker
+                          ↓
+                        Neon (PostgreSQL)
+                          Users, Repos, Issues
+                          Subscriptions, EmailLogs
+```
 
-OpenContributers turns “I want to contribute to open source someday” into a daily 5-minute practice.
+---
+
+## Running locally
+
+### Prerequisites
+
+- Node.js 18+
+- Docker Desktop
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/devansh-jagtap/openContributers
+cd openContributers
+npm install
+```
+
+### 2. Start local database and Redis
+
+```bash
+docker run --name opencontributers-db \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=opencontributers \
+  -p 5432:5432 -d postgres
+
+docker run --name opencontributers-redis \
+  -p 6379:6379 -d redis
+```
+
+### 3. Create a GitHub OAuth App
+
+Go to GitHub → Settings → Developer settings → OAuth Apps → New OAuth App
+
+- Homepage URL: `http://localhost:3000`
+- Callback URL: `http://localhost:3000/api/auth/callback/github`
+
+Copy the Client ID and Client Secret.
+
+### 4. Set up environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/opencontributers"
+REDIS_URL="redis://localhost:6379"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="any-random-string"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+RESEND_API_KEY="your-resend-api-key"
+RESEND_FROM_EMAIL="onboarding@resend.dev"
+```
+
+### 5. Run migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Start the app
+
+Open two terminals:
+
+```bash
+# Terminal 1 — Next.js app
+npm run dev
+
+# Terminal 2 — Background worker
+npm run worker
+```
+
+Visit `http://localhost:3000`
+
+---
+
+## Contributing
+
+Contributions are welcome. Here's how:
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/your-feature`
+3. Make your changes
+4. Open a pull request with a clear description
+
+### Good first issues
+
+- Add email open tracking with a pixel tracker
+- Build a user settings page to change issues per day (1–5)
+- Add label filtering so users receive only `good first issue` or `help wanted` issues
+- Show a public repo browser on the homepage with subscriber counts
+- Add GitHub webhook support for real-time issue updates instead of polling
+- Write tests for API routes
+
+---
+
+## Database schema
+
+```
+User           — GitHub profile, email, session
+Repo           — owner, name, stars, language, lastSyncedAt
+Subscription   — links User to Repo, stores issuesPerDay
+Issue          — GitHub issue data, labels, state
+EmailLog       — tracks which issues were sent to which users
+```
+
+---
+
+## License
+
+MIT — do whatever you want with it.
+
+---
+
+Built by [Devansh Jagtap](https://github.com/devansh-jagtap)
