@@ -8,6 +8,9 @@ export async function GET(req: NextRequest) {
 
   const query = req.nextUrl.searchParams.get("q")
   if (!query) return NextResponse.json({ error: "Query required" }, { status: 400 })
+  const pageParam = Number(req.nextUrl.searchParams.get("page") ?? "1")
+  const page = Number.isFinite(pageParam) && pageParam > 0 ? Math.floor(pageParam) : 1
+  const perPage = 10
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
@@ -17,7 +20,7 @@ export async function GET(req: NextRequest) {
     headers["Authorization"] = `Bearer ${session.user.githubToken}`
   }
 
-  const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&per_page=10`
+  const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&per_page=${perPage}&page=${page}`
   
   let response = await fetch(url, { headers })
 
@@ -43,5 +46,8 @@ export async function GET(req: NextRequest) {
     url: repo.html_url,
   }))
 
-  return NextResponse.json({ repos })
+  const totalCount = Math.min(data.total_count ?? 0, 1000)
+  const totalPages = Math.max(1, Math.ceil(totalCount / perPage))
+
+  return NextResponse.json({ repos, page, totalPages, totalCount })
 }
