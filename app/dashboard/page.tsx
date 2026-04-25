@@ -98,12 +98,12 @@ export default async function DashboardPage() {
           </div>
 
           {/* COL 2 — Subscriptions */}
-          <div id="subscriptions" className="animate-fade-up scroll-mt-6" style={{ animationDelay: "160ms" }}>
+          <div id="subscriptions" className="animate-fade-up h-full min-h-0 scroll-mt-6" style={{ animationDelay: "160ms" }}>
             <MySubscriptions />
           </div>
 
           {/* COL 3 — Discover */}
-          <div id="find-repos" className="animate-fade-up scroll-mt-6" style={{ animationDelay: "240ms" }}>
+          <div id="find-repos" className="animate-fade-up h-full min-h-0 scroll-mt-6" style={{ animationDelay: "240ms" }}>
             <RepoSearch />
           </div>
 
