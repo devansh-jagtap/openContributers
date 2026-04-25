@@ -1,6 +1,6 @@
 # OpenContributers
 
-A habit-building tool for developers who want to contribute to open source but don't know where to start.
+A habit building tool for developers who want to contribute to open source but don't know where to start.
 
 **Live:** [opencontributers.vercel.app](https://opencontributers.vercel.app)
 
@@ -8,7 +8,7 @@ A habit-building tool for developers who want to contribute to open source but d
 
 ## What it does
 
-OpenContributers delivers one open GitHub issue per day to your inbox from repositories you follow. Instead of staring at a repo with 800 open issues and closing the tab, you get one small actionable task — triage it, comment on it, fix it. Small actions compound into real open source impact.
+OpenContributers delivers one open GitHub issue per day to your inbox from repositories you follow. Instead of staring at a repo with 800 open issues and closing the tab, you get one small actionable task triage it, comment on it, fix it. Small actions compound into real open source impact.
 
 The idea: contributing to open source is hard to start but easy to maintain once you have a habit. This app builds that habit.
 
