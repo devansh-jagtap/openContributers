@@ -75,6 +75,31 @@ body {
   animation: floatY 5s ease-in-out infinite;
 }
 
+.themed-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.45) transparent;
+}
+
+.themed-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themed-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(82, 82, 91, 0.55);
+  background-clip: content-box;
+}
+
 @keyframes fadeUp {
   to {
     opacity: 1;

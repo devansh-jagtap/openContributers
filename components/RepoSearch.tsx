@@ -53,7 +53,7 @@ export default function RepoSearch() {
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
+    <div className="flex h-full flex-col rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
       <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Discover</p>
       <h2 className="mt-1 text-lg font-semibold text-zinc-900">Find a repo to contribute to</h2>
 
@@ -77,7 +77,7 @@ export default function RepoSearch() {
 
       {repos.length > 0 && (
         <>
-          <div className="mt-4 flex flex-col gap-3">
+          <div className="themed-scrollbar mt-4 flex flex-1 flex-col gap-3 overflow-y-auto pr-1">
             {repos.map(repo => (
               <div
                 key={repo.id}

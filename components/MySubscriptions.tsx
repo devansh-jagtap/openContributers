@@ -66,7 +66,7 @@ export default function MySubscriptions() {
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
+    <div className="flex h-full flex-col rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Subscriptions</p>
@@ -85,7 +85,7 @@ export default function MySubscriptions() {
 
       {!loading && subscriptions.length > 0 && (
         <>
-          <div className="mt-5 flex flex-col gap-3">
+          <div className="themed-scrollbar mt-5 flex flex-1 flex-col gap-3 overflow-y-auto pr-1">
             {subscriptions.map(sub => (
               <div
                 key={sub.id}
