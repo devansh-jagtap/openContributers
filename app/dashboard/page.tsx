@@ -5,6 +5,7 @@ import Link from "next/link"
 import RepoSearch from "@/components/RepoSearch"
 import MySubscriptions from "@/components/MySubscriptions"
 import SignOutButton from "@/components/SignOutButton"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -20,7 +21,7 @@ export default async function DashboardPage() {
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6">
 
         {/* NAVBAR */}
-        <header className="animate-fade-up rounded-2xl border border-zinc-200/80 bg-white/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.07)]">
+        <header className="animate-fade-up rounded-2xl border border-zinc-200/80 bg-white/90 dark:border-zinc-800/80 dark:bg-zinc-900/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.07)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {session.user?.image && (
@@ -31,22 +32,23 @@ export default async function DashboardPage() {
                 />
               )}
               <div>
-                <Link href="/" className="text-xs text-zinc-400 hover:text-zinc-600 transition">
+                <Link href="/" className="text-xs text-zinc-400 dark:text-zinc-500 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition">
                   OpenContributers
                 </Link>
-                <p className="text-base font-semibold text-zinc-900">
+                <p className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                   Welcome, {session.user?.name?.split(" ")[0] ?? "Contributor"}
                 </p>
-                <p className="text-xs text-zinc-500">{session.user?.email}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">{session.user?.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100"
+                className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
               >
                 Home
               </Link>
+              <ThemeToggle />
               <SignOutButton />
             </div>
           </div>
@@ -57,9 +59,9 @@ export default async function DashboardPage() {
 
           {/* COL 1 — Direction Guide */}
           <div className="animate-fade-up scroll-mt-6 lg:h-[640px]" style={{ animationDelay: "80ms" }}>
-            <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.06)] h-full">
-              <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Direction Guide</p>
-              <h2 className="mt-1 text-base font-semibold text-zinc-900">Follow this exact flow each day</h2>
+            <div className="rounded-2xl border border-zinc-200/80 bg-white/90 dark:border-zinc-800/80 dark:bg-zinc-900/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.06)] h-full">
+              <p className="text-xs uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">Direction Guide</p>
+              <h2 className="mt-1 text-base font-semibold text-zinc-900 dark:text-zinc-100">Follow this exact flow each day</h2>
               <div className="mt-4 flex flex-col gap-3">
                 {[
                   {
@@ -84,11 +86,11 @@ export default async function DashboardPage() {
                     cta: "View Workflow",
                   },
                 ].map((item) => (
-                  <article key={item.step} className="rounded-xl border border-zinc-100 bg-zinc-50/90 p-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">Step {item.step}</p>
-                    <p className="mt-1 text-sm font-semibold text-zinc-900">{item.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-zinc-600">{item.text}</p>
-                    <Link href={item.href} className="mt-3 inline-block text-xs font-medium text-zinc-900 underline-offset-2 hover:underline">
+                  <article key={item.step} className="rounded-xl border border-zinc-100 bg-zinc-50/90 dark:border-zinc-800/50 dark:bg-zinc-800/50 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-zinc-400">Step {item.step}</p>
+                    <p className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">{item.title}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">{item.text}</p>
+                    <Link href={item.href} className="mt-3 inline-block text-xs font-medium text-zinc-900 dark:text-zinc-100 underline-offset-2 hover:underline">
                       {item.cta}
                     </Link>
                   </article>
@@ -110,21 +112,21 @@ export default async function DashboardPage() {
         </div>
 
         {/* FOOTER */}
-        <footer className="animate-fade-up rounded-2xl border border-zinc-200/80 bg-white/85 px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.05)]" style={{ animationDelay: "320ms" }}>
+        <footer className="animate-fade-up rounded-2xl border border-zinc-200/80 bg-white/85 dark:border-zinc-800/80 dark:bg-zinc-900/85 px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.05)]" style={{ animationDelay: "320ms" }}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-semibold text-zinc-900">OpenContributers</p>
-              <p className="mt-0.5 text-xs text-zinc-500">Small daily steps toward meaningful open source impact.</p>
+              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">OpenContributers</p>
+              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">Small daily steps toward meaningful open source impact.</p>
             </div>
-            <div className="flex flex-wrap gap-4 text-xs text-zinc-500">
-              <Link href="/" className="transition hover:text-zinc-900">Home</Link>
-              <a href="https://github.com/devansh-jagtap/openContributers" target="_blank" rel="noreferrer" className="transition hover:text-zinc-900">GitHub</a>
-              <a href="https://github.com/devansh-jagtap/openContributers/issues" target="_blank" rel="noreferrer" className="transition hover:text-zinc-900">Issues</a>
+            <div className="flex flex-wrap gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+              <Link href="/" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">Home</Link>
+              <a href="https://github.com/devansh-jagtap/openContributers" target="_blank" rel="noreferrer" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">GitHub</a>
+              <a href="https://github.com/devansh-jagtap/openContributers/issues" target="_blank" rel="noreferrer" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">Issues</a>
             </div>
           </div>
-          <div className="mt-4 border-t border-zinc-100 pt-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-zinc-400">© 2026 OpenContributers. Open source under MIT.</p>
-            <p className="text-xs text-zinc-400">Made by <a href="https://github.com/devansh-jagtap" target="_blank" rel="noreferrer" className="font-medium text-zinc-600 hover:text-zinc-900 transition">Devansh Jagtap</a></p>
+          <div className="mt-4 border-t border-zinc-100 dark:border-zinc-800 pt-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">© 2026 OpenContributers. Open source under MIT.</p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">Made by <a href="https://github.com/devansh-jagtap" target="_blank" rel="noreferrer" className="font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition">Devansh Jagtap</a></p>
           </div>
         </footer>
 

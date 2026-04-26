@@ -53,7 +53,7 @@ export default function RepoSearch() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
+    <div className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200/80 bg-white/90 dark:border-zinc-800/80 dark:bg-zinc-900/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
       <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Discover</p>
       <h2 className="mt-1 text-lg font-semibold text-zinc-900">Find a repo to contribute to</h2>
 
@@ -64,7 +64,7 @@ export default function RepoSearch() {
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === "Enter" && handleSearch()}
           placeholder='Try "react" or "facebook/react"'
-          className="flex-1 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/20"
+          className="flex-1 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 dark:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-900/20"
         />
         <button
           onClick={() => handleSearch(1)}
@@ -88,12 +88,12 @@ export default function RepoSearch() {
                     href={`https://github.com/${repo.fullName}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-semibold text-zinc-900 hover:underline underline-offset-2 truncate"
+                    className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-2 truncate"
                   >
                     {repo.fullName}
                   </a>
                   <p className="text-xs leading-relaxed text-zinc-500 line-clamp-2">{repo.description}</p>
-                  <div className="flex gap-3 mt-1 text-xs text-zinc-400">
+                  <div className="flex gap-3 mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                     {repo.language && <span>⬡ {repo.language}</span>}
                     <span>★ {repo.stars.toLocaleString()}</span>
                   </div>
@@ -115,7 +115,7 @@ export default function RepoSearch() {
 
           {totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/80 px-3 py-2">
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 dark:text-zinc-500">
                 Page {page} of {totalPages}
               </p>
               <div className="flex items-center gap-2">

@@ -66,7 +66,7 @@ export default function MySubscriptions() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
+    <div className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200/80 bg-white/90 dark:border-zinc-800/80 dark:bg-zinc-900/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Subscriptions</p>
@@ -79,7 +79,7 @@ export default function MySubscriptions() {
       {!loading && subscriptions.length === 0 && (
         <div className="mt-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 p-8 text-center">
           <p className="text-sm text-zinc-500">No subscriptions yet.</p>
-          <p className="mt-1 text-xs text-zinc-400">Search for repos below and subscribe to get started.</p>
+          <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">Search for repos below and subscribe to get started.</p>
         </div>
       )}
 
@@ -96,14 +96,14 @@ export default function MySubscriptions() {
                     href={`https://github.com/${sub.repo.fullName}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-semibold text-zinc-900 hover:underline underline-offset-2 truncate"
+                    className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-2 truncate"
                   >
                     {sub.repo.fullName}
                   </a>
                   {sub.repo.description && (
                     <p className="text-xs leading-relaxed text-zinc-500 line-clamp-2">{sub.repo.description}</p>
                   )}
-                  <div className="flex gap-3 mt-1 text-xs text-zinc-400">
+                  <div className="flex gap-3 mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                     {sub.repo.language && <span>⬡ {sub.repo.language}</span>}
                     <span>★ {sub.repo.stars.toLocaleString()}</span>
                   </div>
@@ -121,7 +121,7 @@ export default function MySubscriptions() {
 
           {totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/80 px-3 py-2">
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 dark:text-zinc-500">
                 Page {page} of {totalPages}
               </p>
               <div className="flex items-center gap-2">
