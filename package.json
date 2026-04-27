@@ -16,6 +16,7 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@react-email/components": "^1.0.12",
+    "@vercel/analytics": "^2.0.1",
     "bullmq": "^5.75.2",
     "dotenv": "^17.4.2",
     "ioredis": "^5.10.1",
