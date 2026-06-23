@@ -1,72 +1,24 @@
 import { Worker } from "bullmq";
 import { redisConnection } from "@/lib/queue";
 import { prisma } from "@/lib/prisma";
+import { syncRepository } from "@/lib/jobs/syncRepo";
 
 export function startSyncWorker() {
   const worker = new Worker(
     "sync-repo",
     async (job) => {
+      if (job.name === "dispatch-repo-sync") {
+        return dispatchRepositorySync();
+      }
+
       const { repoId, owner, name, githubToken } = job.data;
 
+      if (!repoId || !owner || !name) {
+        throw new Error("sync-repo job is missing repository data");
+      }
+
       console.log(`Syncing issues for ${owner}/${name}...`);
-
-      const headers: Record<string, string> = {
-        Accept: "application/vnd.github.v3+json",
-      };
-      if (githubToken) {
-        headers["Authorization"] = `Bearer ${githubToken}`;
-      }
-
-      const url = `https://api.github.com/repos/${owner}/${name}/issues?state=open&per_page=100`;
-      let response = await fetch(url, { headers });
-
-      if (response.status === 401) {
-        console.log("Token invalid, retrying without auth...");
-        response = await fetch(url, {
-          headers: { Accept: "application/vnd.github.v3+json" },
-        });
-      }
-
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
-      }
-      const issues = await response.json();
-
-      console.log(`Found ${issues.length} open issues for ${owner}/${name}`);
-
-      for (const issue of issues) {
-        if (issue.pull_request) continue;
-
-        await prisma.issue.upsert({
-          where: {
-            repoId_githubNumber: {
-              repoId,
-              githubNumber: issue.number,
-            },
-          },
-          update: {
-            title: issue.title,
-            body: issue.body,
-            state: issue.state,
-            labels: issue.labels.map((l: any) => l.name),
-          },
-          create: {
-            repoId,
-            githubNumber: issue.number,
-            title: issue.title,
-            body: issue.body ?? "",
-            url: issue.html_url,
-            state: issue.state,
-            labels: issue.labels.map((l: any) => l.name),
-            githubCreatedAt: new Date(issue.created_at),
-          },
-        });
-      }
-
-      await prisma.repo.update({
-        where: { id: repoId },
-        data: { lastSyncedAt: new Date() },
-      });
+      await syncRepository({ repoId, owner, name, githubToken });
 
       console.log(`Sync complete for ${owner}/${name}`);
     },
@@ -82,4 +34,42 @@ export function startSyncWorker() {
   });
 
   return worker;
+}
+
+/** Refresh all followed repositories every six hours using a subscriber token. */
+async function dispatchRepositorySync() {
+  const { syncQueue } = await import("@/lib/queue");
+  const repos = await prisma.repo.findMany({
+    where: { subscriptions: { some: { active: true } } },
+    include: {
+      subscriptions: {
+        where: { active: true },
+        include: {
+          user: {
+            include: {
+              accounts: {
+                where: { provider: "github" },
+                select: { access_token: true },
+                take: 1,
+              },
+            },
+          },
+        },
+        take: 1,
+      },
+    },
+  });
+
+  await Promise.all(
+    repos.map((repo) =>
+      syncQueue.add("sync-repo", {
+        repoId: repo.id,
+        owner: repo.owner,
+        name: repo.name,
+        githubToken: repo.subscriptions[0]?.user.accounts[0]?.access_token ?? null,
+      })
+    )
+  );
+
+  console.log(`[syncRepo] Queued a six-hour refresh for ${repos.length} repositories`);
 }

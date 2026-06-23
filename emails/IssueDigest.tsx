@@ -20,6 +20,7 @@ export interface IssueDigestProps {
   issueBody: string | null;
   issueUrl: string;
   labels: string[];
+  manageUrl: string;
 }
 
 export default function IssueDigest({
@@ -30,6 +31,7 @@ export default function IssueDigest({
   issueBody = null,
   issueUrl = "https://github.com",
   labels = [],
+  manageUrl = "https://opencontributers.vercel.app/dashboard",
 }: IssueDigestProps) {
   const preview = `Your daily issue from ${repoFullName}: #${issueNumber} ${issueTitle}`;
 
@@ -112,11 +114,7 @@ export default function IssueDigest({
               <strong>{repoFullName}</strong> on opencontributers.
             </Text>
             <Text style={footerText}>
-              <Link href="{{unsubscribe_url}}" style={footerLink}>
-                Unsubscribe from this repo
-              </Link>{" "}
-              ·{" "}
-              <Link href="{{manage_url}}" style={footerLink}>
+              <Link href={manageUrl} style={footerLink}>
                 Manage subscriptions
               </Link>
             </Text>

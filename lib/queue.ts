@@ -10,6 +10,12 @@ export const redisConnection = new IORedis(process.env.REDIS_URL!, {
 
 export const syncQueue = new Queue("sync-repo", {
   connection: redisConnection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: "exponential", delay: 5000 },
+    removeOnComplete: 100,
+    removeOnFail: 50,
+  },
 })
 
 export const digestQueue = new Queue("send-digest", {
@@ -22,17 +28,28 @@ export const digestQueue = new Queue("send-digest", {
   },
 })
 
-export async function scheduleDailyDigest() {
+export async function scheduleWorkerJobs() {
+  // Retire old schedulers. A single dispatcher now checks user preferences
+  // every minute, which avoids creating one repeatable Redis schedule per user.
   await digestQueue.removeJobScheduler("daily-digest")
 
   await digestQueue.upsertJobScheduler(
-    "daily-digest",
-    { pattern: "0 3 * * *" },
+    "dispatch-due-digests",
+    { pattern: "* * * * *" },
     {
-      name: "dispatch-digest",
+      name: "dispatch-due-digests",
       data: {},
     }
   )
 
-  console.log("[queue] Daily digest scheduled at 03:00 UTC")
+  await syncQueue.upsertJobScheduler(
+    "sync-all-repositories",
+    { pattern: "0 */6 * * *" },
+    {
+      name: "dispatch-repo-sync",
+      data: {},
+    }
+  )
+
+  console.log("[queue] Digest dispatcher and six-hour repository sync scheduled")
 }

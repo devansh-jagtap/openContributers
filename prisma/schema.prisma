@@ -12,6 +12,12 @@ model User {
   username      String?
   email         String?   @unique
   emailVerified DateTime?
+  emailConfirmedAt         DateTime?
+  emailConfirmationToken   String?   @unique
+  emailConfirmationExpires DateTime?
+  timezone                 String    @default("UTC")
+  preferredSendTime        String    @default("09:00")
+  lastDigestSentAt         DateTime?
   image         String?
   name          String?
   avatarUrl     String?
@@ -77,6 +83,8 @@ model EmailLog {
   openedAt DateTime?
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   issue    Issue     @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, issueId])
 }
 
 model Account {

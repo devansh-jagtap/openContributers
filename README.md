@@ -22,7 +22,7 @@ The idea: contributing to open source is hard to start but easy to maintain once
 | Database | PostgreSQL on Neon |
 | ORM | Prisma |
 | Job Queue | Redis on Upstash + BullMQ |
-| Worker Host | Railway |
+| Worker Host | Any always-on Node service (Northflank Sandbox, Oracle Always Free VM, small VPS, etc.) |
 | Frontend Host | Vercel |
 | Auth | NextAuth.js (GitHub OAuth) |
 | Email | Resend |
@@ -35,8 +35,9 @@ The idea: contributing to open source is hard to start but easy to maintain once
 1. Sign in with GitHub
 2. Search for repos you care about and subscribe
 3. Background workers sync open issues from GitHub every 6 hours
-4. Every day at 3am UTC a digest job sends you one issue per subscribed repo
-5. You triage, comment, or fix — and build the habit
+4. A BullMQ dispatcher checks every minute for users whose chosen local delivery time is due
+5. Each user receives their digest at the local time and timezone they choose
+6. You triage, comment, or fix — and build the habit
 
 ---
 
@@ -46,9 +47,10 @@ The idea: contributing to open source is hard to start but easy to maintain once
 Vercel (Next.js)          Upstash (Redis)
   API routes       →      Job Queue
   Frontend UI      ←      ↓
-                        Railway (BullMQ Workers)
+                        Always-on Node Worker
                           Sync Worker
-                          Digest Worker
+                          Digest dispatcher
+                          Digest + confirmation sender
                           ↓
                         Neon (PostgreSQL)
                           Users, Repos, Issues
@@ -105,7 +107,7 @@ NEXTAUTH_SECRET="any-random-string"
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 RESEND_API_KEY="your-resend-api-key"
-RESEND_FROM_EMAIL="onboarding@resend.dev"
+RESEND_FROM_EMAIL="OpenContributers <digest@updates.yourdomain.com>"
 ```
 
 ### 5. Run migrations
@@ -127,6 +129,40 @@ npm run worker
 ```
 
 Visit `http://localhost:3000`
+
+## Production email and worker setup
+
+The Vercel deployment serves the website and API routes. It must not be used as
+the BullMQ worker host, because Vercel functions are request-based and cannot
+poll Redis continuously. Run `npm run worker:prod` on a separate always-on Node
+service.
+
+Set the same `DATABASE_URL`, `REDIS_URL`, and `RESEND_*` variables in both
+Vercel and the worker host. Set the OAuth and `NEXTAUTH_*` variables on Vercel,
+and set `NEXTAUTH_URL` on the worker host so confirmation links point at the
+public site.
+
+Good low-cost worker hosts:
+
+- Northflank Sandbox: easiest free always-on option if your account has access.
+- Oracle Cloud Always Free VM: most durable free option, but it needs server
+  setup.
+- A small VPS: usually the simplest serious production option once the app grows.
+
+Cloudflare Workers/Pages can host request-based code and scheduled triggers, but
+they are not a drop-in replacement for a long-running BullMQ worker. Keep BullMQ
+on an always-on Node runtime if you want durable retries and reliable queue
+processing.
+
+Before enabling user delivery in Resend:
+
+1. Add a domain you control in Resend and add the DNS records it gives you.
+2. Wait until Resend marks the domain verified.
+3. Set `RESEND_FROM_EMAIL` to an address on that verified domain.
+
+`onboarding@resend.dev` is Resend's test sender and is not a production sender
+for your users. The app now sends a confirmation email after a first GitHub
+sign-in and only sends issue digests after that link is confirmed.
 
 ---
 

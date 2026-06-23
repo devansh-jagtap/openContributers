@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { digestQueue } from "@/lib/queue";
 import { prisma } from "@/lib/prisma";
+import { digestQueue } from "@/lib/queue";
 
 // POST /api/digest/trigger
 // Triggers a digest send for the current user (dev/testing)

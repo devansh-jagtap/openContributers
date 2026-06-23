@@ -6,6 +6,7 @@ import RepoSearch from "@/components/RepoSearch"
 import MySubscriptions from "@/components/MySubscriptions"
 import SignOutButton from "@/components/SignOutButton"
 import { ThemeToggle } from "@/components/ThemeToggle"
+import EmailPreferences from "@/components/EmailPreferences"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -110,6 +111,8 @@ export default async function DashboardPage() {
           </div>
 
         </div>
+
+        <EmailPreferences />
 
         {/* FOOTER */}
         <footer className="animate-fade-up rounded-2xl border border-zinc-200/80 bg-white/85 dark:border-zinc-800/80 dark:bg-zinc-900/85 px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.05)]" style={{ animationDelay: "320ms" }}>

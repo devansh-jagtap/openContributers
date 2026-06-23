@@ -31,6 +31,20 @@ export const authOptions: NextAuthOptions = {
       return session
     },
   },
+  events: {
+    async createUser({ user }) {
+      // OAuth proves GitHub identity, but a direct confirmation makes sure the
+      // inbox can receive scheduled product email.
+      if (!user.email) return
+
+      try {
+        const { queueEmailConfirmation } = await import("@/lib/emailConfirmation")
+        await queueEmailConfirmation(user.id)
+      } catch (error) {
+        console.error("[auth] Could not send email confirmation:", error)
+      }
+    },
+  },
   pages: {
     signIn: "/login",
   },
