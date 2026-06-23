@@ -69,16 +69,16 @@ export default function MySubscriptions() {
     <div className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200/80 bg-white/90 dark:border-zinc-800/80 dark:bg-zinc-900/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:p-7">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Subscriptions</p>
-          <h2 className="mt-1 text-lg font-semibold text-zinc-900">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">Subscriptions</p>
+          <h2 className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
             {loading ? "Loading..." : `My repos (${totalCount})`}
           </h2>
         </div>
       </div>
 
       {!loading && subscriptions.length === 0 && (
-        <div className="mt-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 p-8 text-center">
-          <p className="text-sm text-zinc-500">No subscriptions yet.</p>
+        <div className="mt-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/80 p-8 text-center dark:border-zinc-700 dark:bg-zinc-800/40">
+          <p className="text-sm text-zinc-500 dark:text-zinc-300">No subscriptions yet.</p>
           <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">Search for repos below and subscribe to get started.</p>
         </div>
       )}
@@ -87,10 +87,10 @@ export default function MySubscriptions() {
         <>
           <div className="themed-scrollbar mt-5 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
             {subscriptions.map(sub => (
-              <div
-                key={sub.id}
-                className="flex items-start justify-between gap-4 rounded-xl border border-zinc-100 bg-zinc-50/80 p-4"
-              >
+                <div
+                  key={sub.id}
+                  className="flex items-start justify-between gap-4 rounded-xl border border-zinc-100 bg-zinc-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-800/50"
+                >
                 <div className="flex flex-col gap-1 min-w-0">
                   <a
                     href={`https://github.com/${sub.repo.fullName}`}
@@ -101,7 +101,7 @@ export default function MySubscriptions() {
                     {sub.repo.fullName}
                   </a>
                   {sub.repo.description && (
-                    <p className="text-xs leading-relaxed text-zinc-500 line-clamp-2">{sub.repo.description}</p>
+                    <p className="text-xs leading-relaxed text-zinc-500 line-clamp-2 dark:text-zinc-400">{sub.repo.description}</p>
                   )}
                   <div className="flex gap-3 mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                     {sub.repo.language && <span>⬡ {sub.repo.language}</span>}
@@ -111,7 +111,7 @@ export default function MySubscriptions() {
                 <button
                   onClick={() => handleUnsubscribe(sub.repoId)}
                   disabled={unsubscribing === sub.repoId}
-                  className="shrink-0 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                  className="shrink-0 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-red-500/40 dark:hover:bg-red-500/10 dark:hover:text-red-300"
                 >
                   {unsubscribing === sub.repoId ? "Removing..." : "Unsubscribe"}
                 </button>
@@ -120,22 +120,22 @@ export default function MySubscriptions() {
           </div>
 
           {totalPages > 1 && (
-            <div className="mt-4 flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/80 px-3 py-2">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 dark:text-zinc-500">
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/80 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-800/40">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Page {page} of {totalPages}
               </p>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => fetchSubscriptions(page - 1)}
                   disabled={loading || page <= 1}
-                  className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                  className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => fetchSubscriptions(page + 1)}
                   disabled={loading || page >= totalPages}
-                  className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                  className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   Next
                 </button>
